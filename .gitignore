@@ -2,3 +2,4 @@
 /vendor/
 /.vibeduck/
 /vibeduckrc.json
+/composer.lock
