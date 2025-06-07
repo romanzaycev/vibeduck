@@ -185,6 +185,15 @@ class ListDirectoryTool extends AbstractTool
 
                     $itemFullPath = $resolvedFullPath . DIRECTORY_SEPARATOR . $itemName;
                     $isDir = is_dir($itemFullPath);
+
+                    if ($isDir) {
+                        foreach ($ignoreDirs as $ignoreDir) {
+                            if (str_starts_with($itemFullPath, $ignoreDir)) {
+                                continue 2;
+                            }
+                        }
+                    }
+
                     $isFile = is_file($itemFullPath); // is_link будет определено как is_file или is_dir если ведет на них
 
                     if (($isDir && $includeDirs) || ($isFile && $includeFiles)) {
