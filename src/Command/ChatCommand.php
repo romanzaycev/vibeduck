@@ -292,7 +292,7 @@ class ChatCommand extends Command
                 if ($userChoice === 'r') { /* ... refine logic ... */
                     // Using readline for refinement prompt for consistency
                     $this->output->writeln("<comment>Refine arguments for '{$toolName}'. Enter refinement prompt:</comment>");
-                    $refinementPrompt = readline("<fg=yellow>> Refine:</> ");
+                    $refinementPrompt = readline("Refine :> ");
                     if (!empty(trim((string)$refinementPrompt))) {
                         readline_add_history(trim((string)$refinementPrompt));
                         $this->output->writeln("<comment>Asking AI to refine arguments for '{$toolName}'...</comment>");
