@@ -33,8 +33,8 @@ class Configuration
             'IGNORE_DIRS' => [
                 "/vendor",
                 "/node_modules",
-                "./.vibeduck",
-                "./git",
+                "/.vibeduck",
+                "/.git",
             ],
         ];
     }
