@@ -1,0 +1,86 @@
+#!/usr/bin/env php
+<?php
+
+use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+
+$__vendorAutoloaderIncluded = false;
+
+if (isset($_composer_autoload_path)) {
+    require $_composer_autoload_path;
+    $__vendorAutoloaderIncluded = true;
+} else {
+    $paths = [
+        __DIR__ . '/../vendor/autoload.php',
+        __DIR__ . '/../../vendor/autoload.php',
+        __DIR__ . '/../../../autoload.php',
+        getenv('HOME') . '/.composer/vendor/autoload.php',
+        getenv('APPDATA') . '/Composer/vendor/autoload.php',
+    ];
+
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            require $path;
+            define("VIBE_DIR", dirname($path, 2));
+            $__vendorAutoloaderIncluded = true;
+            break;
+        }
+    }
+}
+
+if (!$__vendorAutoloaderIncluded) {
+    fwrite(
+        STDERR,
+        "Cannot find `vendor/autoload.php` file",
+    );
+
+    die(1);
+}
+
+$configDir = dirname(__DIR__);
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->useAutowiring(true);
+$containerBuilder->addDefinitions(require $configDir . "/config/container.php");
+
+try {
+    /** @var ContainerInterface $container */
+    $container = $containerBuilder->build();
+} catch (Exception $e) {
+    // Выводим ошибку в stderr, если контейнер не смог собраться
+    fwrite(STDERR, "Failed to build DI container: " . $e->getMessage() . PHP_EOL);
+    exit(1); // Завершаем с кодом ошибки
+}
+
+$input = new ArgvInput();
+$input->setInteractive(true);
+$output = new ConsoleOutput();
+$application = new \Romanzaycev\Vibe\ConsoleApp();
+
+try {
+    // Add commands
+    $commands = require $configDir . "/config/commands.php";
+
+    foreach ($commands as $commandClass) {
+        $application->add($container->get($commandClass));
+    }
+} catch (\Throwable $e) {
+    $application->renderThrowable($e, $output);
+    exit(1);
+}
+
+try {
+    $output->writeln(<<<VIBE
+
+  ▘▌    ▌    ▌    ▖ 
+▌▌▌▛▌█▌▛▌▌▌▛▘▙▘  ▖▝▖
+▚▘▌▙▌▙▖▙▌▙▌▙▖▛▖  ▖▞ 
+
+VIBE
+);
+    $application->run($input, $output);
+} catch (\Throwable $e) {
+    fwrite(STDERR, "Application runtime error: " . $e->getMessage() . PHP_EOL);
+    exit(1);
+}
