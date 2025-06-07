@@ -1,7 +1,7 @@
 # Vibeduck :> AI-Powered Coding Assistant
 
 <p align="center">
-  <a href="https://github.com/romanzaycev/vibeduck"><img align="center" width="864" src="https://github.com/romanzaycev/vibeduck/.github/blob/main/profile/vd-poster_opimized.png" /></a>
+  <a href="https://github.com/romanzaycev/vibeduck"><img align="center" width="864" src="https://github.com/romanzaycev/vibeduck/blob/main/.github/vd-poster_opimized.png?raw=true" /></a>
 </p>
 
 _**Vibeduck**_ is an experimental open-source command-line tool designed to assist with coding tasks by leveraging Large Language Models (LLMs). It allows developers to interact with an AI in a chat-like interface directly from their terminal. The AI can understand requests and use a defined set of tools to interact with the local filesystem, such as reading, creating, or patching files.
